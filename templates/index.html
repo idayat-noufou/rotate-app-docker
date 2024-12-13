@@ -30,8 +30,21 @@
     </style>
 </head>
 <body>
-<button class="button">
-    <img src="https://attic.sh/b2foeufhqfnkv5svkgdh47ejpkgh" alt="Placeholder Image">
-</button>
+<div>
+    <form action="/saveUrl" method="post" >
+        <label for="name">
+            <input type="text" id="name" name="name" placeholder="nom de l'image">
+        </label>
+        <label for="name">
+            <input type="text" id="url" name="url" placeholder="url de l'image">
+        </label>
+        <input type="submit" id="submit" value="Enregistrer">
+    </form>
+</div>
+<div>
+    <button class="button">
+        <img src="{{img_url}}" alt="Placeholder Image">
+    </button>
+</div>
 </body>
 </html>

@@ -1,0 +1,61 @@
+
+services:
+  rotate_app:
+    image: rotate-app
+    container_name: rotate-app
+    environment:
+      DATABASE_URL: postgresql://superadmin:${POSTGRES_PASSWORD}@db:5432/rotate
+      FLASK_ENV: development
+      FLASK_APP: app.py
+    depends_on:
+      - db
+    volumes:
+      - ./app.py:/app/app.py
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+    labels:
+      - "app=rotate"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
+
+
+
+  nginx:
+    image: nginx:alpine
+    container_name: rotate-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - rotate_app
+
+  db:
+    image: postgres
+    container_name: rotate_postgres
+#    ports:
+#      - "5432:5432"
+    volumes:
+      - rotate_app_pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_USER: superadmin
+      POSTGRES_DB: rotate
+    secrets:
+      - postgres_password
+
+
+volumes:
+  rotate_app_pgdata:
+
+secrets:
+   postgres_password:
+     file: ./secrets/postgres_password
+
