@@ -64,6 +64,29 @@ Exécutez les commandes suivantes pour configurer et démarrer l'application :
    docker ps
    ```
 
+
+### Étape 4 : Initialiser Docker Swarm et répartir les réplicas
+
+1. **Recherchez l'adresse IP de votre machine** :
+   ```bash
+   ip addr show
+   ```
+   Notez l'adresse IP de votre interface réseau principale (par exemple, `192.168.1.10`).
+
+2. **Initialisez Docker Swarm** :
+   ```bash
+   docker swarm init --advertise-addr <votre_adresse_ip>
+   ```
+
+3. **Déployez la stack avec Docker Swarm** :
+   ```bash
+   docker stack deploy -c docker-stack.yml rotate_stack
+   ```
+
+6. **Testez et accédez à l'application** :
+   - Accédez à votre application via http://<manager-IP>. 
+   - Accédez à l'interface Portainer via http://<manager-IP>:9000
+
 ## Remarques
 
 - Assurez-vous que les fichiers `.env` et `secrets/postgres_password` ne sont jamais ajoutés au contrôle de version.
@@ -98,4 +121,4 @@ docker-compose down
 
 ## Améliorations futures
 
-- Finir la partie 3 du TP concernant docker swarn
+- Finaliser la répartition des réplicas sur plusieurs nœuds via Docker Swarm.
